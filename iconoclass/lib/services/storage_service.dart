@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
 
 class StorageService {
   static SharedPreferences? _preferences;
@@ -35,7 +36,7 @@ class StorageService {
       final jsonString = jsonEncode(userData);
       return await _prefs.setString(_keyUser, jsonString);
     } catch (e) {
-      print('Error saving user data: $e');
+      developer.log('Error saving user data: $e');
       return false;
     }
   }
@@ -47,7 +48,7 @@ class StorageService {
       if (jsonString == null) return null;
       return jsonDecode(jsonString) as Map<String, dynamic>;
     } catch (e) {
-      print('Error getting user data: $e');
+      developer.log('Error getting user data: $e');
       return null;
     }
   }
@@ -57,7 +58,7 @@ class StorageService {
     try {
       return await _prefs.remove(_keyUser);
     } catch (e) {
-      print('Error clearing user data: $e');
+      developer.log('Error clearing user data: $e');
       return false;
     }
   }
@@ -70,7 +71,7 @@ class StorageService {
       final jsonString = jsonEncode(appData);
       return await _prefs.setString(_keyAppData, jsonString);
     } catch (e) {
-      print('Error saving app data: $e');
+      developer.log('Error saving app data: $e');
       return false;
     }
   }
@@ -82,7 +83,7 @@ class StorageService {
       if (jsonString == null) return null;
       return jsonDecode(jsonString) as Map<String, dynamic>;
     } catch (e) {
-      print('Error getting app data: $e');
+      developer.log('Error getting app data: $e');
       return null;
     }
   }
@@ -92,7 +93,7 @@ class StorageService {
     try {
       return await _prefs.remove(_keyAppData);
     } catch (e) {
-      print('Error clearing app data: $e');
+      developer.log('Error clearing app data: $e');
       return false;
     }
   }
@@ -105,7 +106,7 @@ class StorageService {
       final jsonString = jsonEncode(settings);
       return await _prefs.setString(_keySettings, jsonString);
     } catch (e) {
-      print('Error saving settings: $e');
+      developer.log('Error saving settings: $e');
       return false;
     }
   }
@@ -117,7 +118,7 @@ class StorageService {
       if (jsonString == null) return null;
       return jsonDecode(jsonString) as Map<String, dynamic>;
     } catch (e) {
-      print('Error getting settings: $e');
+      developer.log('Error getting settings: $e');
       return null;
     }
   }
@@ -129,7 +130,7 @@ class StorageService {
     try {
       return await _prefs.setString(_keyLastSync, date.toIso8601String());
     } catch (e) {
-      print('Error saving last sync date: $e');
+      developer.log('Error saving last sync date: $e');
       return false;
     }
   }
@@ -141,7 +142,7 @@ class StorageService {
       if (dateString == null) return null;
       return DateTime.parse(dateString);
     } catch (e) {
-      print('Error getting last sync date: $e');
+      developer.log('Error getting last sync date: $e');
       return null;
     }
   }
@@ -155,7 +156,7 @@ class StorageService {
       await _prefs.remove(_keyLastSync);
       return true;
     } catch (e) {
-      print('Error clearing cache: $e');
+      developer.log('Error clearing cache: $e');
       return false;
     }
   }
@@ -165,7 +166,7 @@ class StorageService {
     try {
       return await _prefs.clear();
     } catch (e) {
-      print('Error clearing all storage: $e');
+      developer.log('Error clearing all storage: $e');
       return false;
     }
   }
@@ -177,7 +178,7 @@ class StorageService {
     try {
       return await _prefs.setString(key, value);
     } catch (e) {
-      print('Error setting string: $e');
+      developer.log('Error setting string: $e');
       return false;
     }
   }
@@ -187,7 +188,7 @@ class StorageService {
     try {
       return _prefs.getString(key);
     } catch (e) {
-      print('Error getting string: $e');
+      developer.log('Error getting string: $e');
       return null;
     }
   }
@@ -197,7 +198,7 @@ class StorageService {
     try {
       return await _prefs.setInt(key, value);
     } catch (e) {
-      print('Error setting int: $e');
+      developer.log('Error setting int: $e');
       return false;
     }
   }
@@ -207,7 +208,7 @@ class StorageService {
     try {
       return _prefs.getInt(key);
     } catch (e) {
-      print('Error getting int: $e');
+      developer.log('Error getting int: $e');
       return null;
     }
   }
@@ -217,7 +218,7 @@ class StorageService {
     try {
       return await _prefs.setBool(key, value);
     } catch (e) {
-      print('Error setting bool: $e');
+      developer.log('Error setting bool: $e');
       return false;
     }
   }
@@ -227,7 +228,7 @@ class StorageService {
     try {
       return _prefs.getBool(key);
     } catch (e) {
-      print('Error getting bool: $e');
+      developer.log('Error getting bool: $e');
       return null;
     }
   }
@@ -237,7 +238,7 @@ class StorageService {
     try {
       return await _prefs.remove(key);
     } catch (e) {
-      print('Error removing key: $e');
+      developer.log('Error removing key: $e');
       return false;
     }
   }
@@ -247,7 +248,7 @@ class StorageService {
     try {
       return _prefs.containsKey(key);
     } catch (e) {
-      print('Error checking key: $e');
+      developer.log('Error checking key: $e');
       return false;
     }
   }
