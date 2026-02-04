@@ -5,7 +5,7 @@
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
 import '../services/storage_service.dart';
-import '../services/auth_service.dart';
+import '../services/auth_services.dart';
 
 class AuthProvider with ChangeNotifier {
   User? _currentUser;
@@ -55,20 +55,17 @@ class AuthProvider with ChangeNotifier {
         _currentUser = user;
         // Save user to local storage for persistent session
         await StorageService.saveUser(user.toJson());
-        _isLoading = false;
-        notifyListeners();
         return true;
       } else {
         _errorMessage = 'Email ou mot de passe incorrect';
-        _isLoading = false;
-        notifyListeners();
         return false;
       }
     } catch (e) {
       _errorMessage = 'Erreur de connexion: ${e.toString()}';
+      return false;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
 
@@ -98,20 +95,17 @@ class AuthProvider with ChangeNotifier {
         _currentUser = user;
         // Save user to local storage
         await StorageService.saveUser(user.toJson());
-        _isLoading = false;
-        notifyListeners();
         return true;
       } else {
         _errorMessage = 'Erreur lors de la création du compte';
-        _isLoading = false;
-        notifyListeners();
         return false;
       }
     } catch (e) {
       _errorMessage = 'Erreur: ${e.toString()}';
+      return false;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
 
@@ -156,14 +150,13 @@ class AuthProvider with ChangeNotifier {
       await StorageService.saveUser(updatedUser.toJson());
       _currentUser = updatedUser;
 
-      _isLoading = false;
-      notifyListeners();
       return true;
     } catch (e) {
       _errorMessage = 'Erreur lors de la mise à jour: ${e.toString()}';
+      return false;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
 
