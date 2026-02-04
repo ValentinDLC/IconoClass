@@ -1,7 +1,3 @@
-// Home tab screen - Main dashboard
-// Displays user greeting, stats, live session, progress cards, and quick action buttons
-// Shows badges count, challenges, and level/points information
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -125,7 +121,10 @@ class HomeTab extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.purple.shade600, Colors.purple.shade400],
+                colors: [
+                  Colors.purple.shade600,
+                  Colors.purple.shade400,
+                ],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
@@ -144,7 +143,7 @@ class HomeTab extends StatelessWidget {
                             Text(
                               'Niveau ${appDataProvider.level}',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.9),
+                                color: Colors.white.withAlpha(230),
                                 fontSize: 12,
                               ),
                             ),
@@ -163,7 +162,7 @@ class HomeTab extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () => _showStats(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.2),
+                        backgroundColor: Colors.white.withAlpha(50),
                         foregroundColor: Colors.white,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(
@@ -287,6 +286,7 @@ class HomeTab extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 20),
 
           // Live Session Card
@@ -380,6 +380,7 @@ class HomeTab extends StatelessWidget {
                 ],
               ),
             ),
+
           const SizedBox(height: 20),
 
           // Quick Actions Grid
@@ -413,7 +414,6 @@ class HomeTab extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
@@ -443,7 +443,7 @@ class _QuickActionCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withAlpha(13), // instead of withOpacity
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
