@@ -6,6 +6,11 @@ import 'package:gsheets/gsheets.dart';
 import '../models/session.dart';
 import '../models/instructor.dart';
 
+// Logger instance used for structured logging throughout the app
+import 'package:logger/logger.dart';
+
+final Logger logger = Logger();
+
 class SheetsService {
   // Google Sheets credentials (replace with your own credentials)
   // To get credentials:
@@ -63,10 +68,12 @@ class SheetsService {
       await _initializeHeaders();
 
       _isInitialized = true;
-    } catch (e) {
-      print('Error initializing Google Sheets: $e');
-      print(
-          'Note: Update credentials and spreadsheet ID in sheets_service.dart');
+    } catch (e, stackTrace) {
+      logger.e(
+        'Error initializing Google Sheets. Update credentials and spreadsheet ID in sheets_service.dart',
+        error: e,
+        stackTrace: stackTrace,
+      );
       // Don't throw - allow app to work offline
     }
   }
@@ -103,8 +110,8 @@ class SheetsService {
           'Bio',
         ]);
       }
-    } catch (e) {
-      print('Error initializing headers: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error initializing headers', error: e, stackTrace: stackTrace);
     }
   }
 
@@ -116,7 +123,7 @@ class SheetsService {
       await _initialize();
 
       if (_sessionsSheet == null) {
-        print('Sessions sheet not initialized');
+        logger.w('Sessions sheet not initialized');
         return [];
       }
 
@@ -134,14 +141,16 @@ class SheetsService {
         try {
           final session = Session.fromSheetRow(rows[i]);
           sessions.add(session);
-        } catch (e) {
-          print('Error parsing session row $i: $e');
+        } catch (e, stackTrace) {
+          logger.e('Error parsing session row $i',
+              error: e, stackTrace: stackTrace);
         }
       }
 
       return sessions;
-    } catch (e) {
-      print('Error getting sessions from sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error getting sessions from sheets',
+          error: e, stackTrace: stackTrace);
       return [];
     }
   }
@@ -152,15 +161,16 @@ class SheetsService {
       await _initialize();
 
       if (_sessionsSheet == null) {
-        print('Sessions sheet not initialized');
+        logger.w('Sessions sheet not initialized');
         return false;
       }
 
       // Add session row
       await _sessionsSheet!.values.appendRow(session.toSheetRow());
       return true;
-    } catch (e) {
-      print('Error adding session to sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error adding session to sheets',
+          error: e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -171,7 +181,7 @@ class SheetsService {
       await _initialize();
 
       if (_sessionsSheet == null) {
-        print('Sessions sheet not initialized');
+        logger.w('Sessions sheet not initialized');
         return false;
       }
 
@@ -185,10 +195,11 @@ class SheetsService {
         }
       }
 
-      print('Session not found: ${session.id}');
+      logger.w('Session not found: ${session.id}');
       return false;
-    } catch (e) {
-      print('Error updating session in sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error updating session in sheets',
+          error: e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -199,7 +210,7 @@ class SheetsService {
       await _initialize();
 
       if (_sessionsSheet == null) {
-        print('Sessions sheet not initialized');
+        logger.w('Sessions sheet not initialized');
         return false;
       }
 
@@ -212,10 +223,11 @@ class SheetsService {
         }
       }
 
-      print('Session not found: $sessionId');
+      logger.w('Session not found: $sessionId');
       return false;
-    } catch (e) {
-      print('Error deleting session from sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error deleting session from sheets',
+          error: e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -228,7 +240,7 @@ class SheetsService {
       await _initialize();
 
       if (_instructorsSheet == null) {
-        print('Instructors sheet not initialized');
+        logger.w('Instructors sheet not initialized');
         return [];
       }
 
@@ -246,14 +258,16 @@ class SheetsService {
         try {
           final instructor = Instructor.fromSheetRow(rows[i]);
           instructors.add(instructor);
-        } catch (e) {
-          print('Error parsing instructor row $i: $e');
+        } catch (e, stackTrace) {
+          logger.e('Error parsing instructor row $i',
+              error: e, stackTrace: stackTrace);
         }
       }
 
       return instructors;
-    } catch (e) {
-      print('Error getting instructors from sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error getting instructors from sheets',
+          error: e, stackTrace: stackTrace);
       return [];
     }
   }
@@ -264,15 +278,16 @@ class SheetsService {
       await _initialize();
 
       if (_instructorsSheet == null) {
-        print('Instructors sheet not initialized');
+        logger.w('Instructors sheet not initialized');
         return false;
       }
 
       // Add instructor row
       await _instructorsSheet!.values.appendRow(instructor.toSheetRow());
       return true;
-    } catch (e) {
-      print('Error adding instructor to sheets: $e');
+    } catch (e, stackTrace) {
+      logger.e('Error adding instructor to sheets',
+          error: e, stackTrace: stackTrace);
       return false;
     }
   }
