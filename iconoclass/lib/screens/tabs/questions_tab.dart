@@ -95,7 +95,7 @@ class _QuestionsTabState extends State<QuestionsTab> {
 
                 // Recipient dropdown
                 DropdownButtonFormField<String>(
-                  value: _selectedRecipient,
+                  initialValue: _selectedRecipient,
                   decoration: const InputDecoration(labelText: 'Destinataire'),
                   items: const [
                     DropdownMenuItem(
@@ -106,6 +106,10 @@ class _QuestionsTabState extends State<QuestionsTab> {
                   onChanged: (value) {
                     setState(() {
                       _selectedRecipient = value!;
+                      // Reset instructor selection when changing recipient
+                      if (value != 'Un intervenant') {
+                        _selectedInstructor = null;
+                      }
                     });
                   },
                 ),
@@ -115,12 +119,17 @@ class _QuestionsTabState extends State<QuestionsTab> {
                 // Instructor selection dropdown (only if recipient is instructor)
                 if (_selectedRecipient == 'Un intervenant')
                   DropdownButtonFormField<String>(
-                    value: _selectedInstructor,
+                    initialValue: _selectedInstructor,
                     decoration: const InputDecoration(labelText: 'Intervenant'),
-                    items: appDataProvider.instructors
-                        .map((i) => DropdownMenuItem(
-                            value: i.name, child: Text(i.name)))
-                        .toList(),
+                    items: [
+                      // Add a default/placeholder item
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('Sélectionner un intervenant'),
+                      ),
+                      ...appDataProvider.instructors.map((i) =>
+                          DropdownMenuItem(value: i.name, child: Text(i.name))),
+                    ],
                     onChanged: (value) {
                       setState(() {
                         _selectedInstructor = value;
@@ -219,7 +228,7 @@ class _QuestionsTabState extends State<QuestionsTab> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
