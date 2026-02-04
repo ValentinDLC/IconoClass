@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/app_data_provider.dart';
-import '../../models/session.dart';
 
 class AdminTab extends StatelessWidget {
   const AdminTab({super.key});
