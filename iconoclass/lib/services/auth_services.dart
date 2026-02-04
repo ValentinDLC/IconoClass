@@ -5,6 +5,11 @@
 import 'package:uuid/uuid.dart';
 import '../models/user.dart';
 
+// Logger instance used for structured logging throughout the app
+import 'package:logger/logger.dart';
+
+final Logger logger = Logger();
+
 class AuthService {
   static const _uuid = Uuid();
 
@@ -59,8 +64,8 @@ class AuthService {
         email: userData['email'] as String,
         role: _parseUserRole(userData['role'] as String?),
       );
-    } catch (e) {
-      print('Login error: $e');
+    } catch (e, stackTrace) {
+      logger.e('Login error', error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -119,8 +124,8 @@ class AuthService {
         email: email,
         role: role,
       );
-    } catch (e) {
-      print('Registration error: $e');
+    } catch (e, stackTrace) {
+      logger.e('Registration error', error: e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -163,18 +168,23 @@ class AuthService {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 1000));
 
-    // Check if email exists
-    final emailExists = _mockUsers.any(
-      (user) => user['email']?.toLowerCase() == email.toLowerCase(),
-    );
+    try {
+      // Check if email exists
+      final emailExists = _mockUsers.any(
+        (user) => user['email']?.toLowerCase() == email.toLowerCase(),
+      );
 
-    if (!emailExists) {
-      throw Exception('Email not found');
+      if (!emailExists) {
+        throw Exception('Email not found');
+      }
+
+      // In production, this would send a password reset email
+      logger.i('Password reset email sent to: $email');
+      return true;
+    } catch (e, stackTrace) {
+      logger.e('Password reset error', error: e, stackTrace: stackTrace);
+      return false;
     }
-
-    // In production, this would send a password reset email
-    print('Password reset email sent to: $email');
-    return true;
   }
 
   // Change password (mock implementation)
@@ -186,13 +196,18 @@ class AuthService {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
-    if (newPassword.length < 6) {
-      throw Exception('New password must be at least 6 characters');
-    }
+    try {
+      if (newPassword.length < 6) {
+        throw Exception('New password must be at least 6 characters');
+      }
 
-    // In production, this would update the password in the backend
-    print('Password changed for user: $userId');
-    return true;
+      // In production, this would update the password in the backend
+      logger.i('Password changed for user: $userId');
+      return true;
+    } catch (e, stackTrace) {
+      logger.e('Change password error', error: e, stackTrace: stackTrace);
+      return false;
+    }
   }
 
   // Delete account (mock implementation)
@@ -200,9 +215,14 @@ class AuthService {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 800));
 
-    // In production, this would delete the account from the backend
-    print('Account deleted: $userId');
-    return true;
+    try {
+      // In production, this would delete the account from the backend
+      logger.i('Account deleted: $userId');
+      return true;
+    } catch (e, stackTrace) {
+      logger.e('Delete account error', error: e, stackTrace: stackTrace);
+      return false;
+    }
   }
 
   // Update user profile
