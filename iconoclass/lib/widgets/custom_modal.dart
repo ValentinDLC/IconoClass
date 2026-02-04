@@ -19,11 +19,11 @@ class CustomModal extends StatelessWidget {
   final VoidCallback onClose;
 
   const CustomModal({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     required this.onClose,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
