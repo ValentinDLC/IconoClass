@@ -9,6 +9,16 @@ import '../providers/app_data_provider.dart';
 class ChallengesModal extends StatelessWidget {
   const ChallengesModal({super.key});
 
+  // Convert challenge color (int or String) to Color
+  Color _getColor(dynamic color) {
+    if (color is int) return Color(color); // Si couleur déjà en int
+    if (color is String) {
+      final hex = color.replaceAll('#', '');
+      return Color(int.parse('FF$hex', radix: 16));
+    }
+    return Colors.grey; // fallback
+  }
+
   @override
   Widget build(BuildContext context) {
     final appDataProvider = Provider.of<AppDataProvider>(context);
@@ -60,12 +70,13 @@ class ChallengesModal extends StatelessWidget {
               itemCount: appDataProvider.challenges.length,
               itemBuilder: (context, index) {
                 final challenge = appDataProvider.challenges[index];
+                final color = _getColor(challenge.color); // couleur safe
 
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Color(challenge.color.primaryColor),
+                    color: color,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -93,7 +104,7 @@ class ChallengesModal extends StatelessWidget {
                                 Text(
                                   challenge.description,
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withAlpha(230),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -116,8 +127,7 @@ class ChallengesModal extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor:
-                                Color(challenge.color.primaryColor),
+                            foregroundColor: color,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           child: const Text(
