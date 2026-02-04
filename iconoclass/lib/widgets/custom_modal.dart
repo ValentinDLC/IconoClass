@@ -32,7 +32,7 @@ class CustomModal extends StatelessWidget {
       onTap: onClose,
       child: Container(
         // Semi-transparent background overlay
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withAlpha(128),
         child: Center(
           child: GestureDetector(
             // Prevent closing when tapping inside the modal
