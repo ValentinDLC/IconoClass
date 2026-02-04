@@ -46,6 +46,16 @@ class ProfileTab extends StatelessWidget {
     }
   }
 
+  String _getUserRole(user) {
+    if (user.isAdmin) {
+      return 'Administrateur';
+    } else if (user.isInstructor) {
+      return 'Intervenant';
+    } else {
+      return 'Étudiant';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -172,7 +182,7 @@ class ProfileTab extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    user.role.displayName,
+                    _getUserRole(user),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
